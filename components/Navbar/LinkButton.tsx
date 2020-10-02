@@ -39,6 +39,6 @@ const AppLink = styled.a<AppLinkProps>`
 	color: ${(props) => (props.currentPath == props.thisPath ? props.theme.colors.fourth : props.theme.colors.main)};
 	:hover {
 		cursor: pointer;
-		color: ${(props) => props.theme.colors.secondary};
+		${(props) => (props.theme.backgroundColor == "black" ? `color: ${props.theme.colors.secondary}` : `color: ${props.theme.colors.fourth}`)};
 	}
 `;

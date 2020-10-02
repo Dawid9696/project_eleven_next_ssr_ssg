@@ -34,7 +34,7 @@ const Option = styled.a`
 	min-width: 40%;
 	flex-direction: column;
 	border-radius: 50px;
-	background-color: ${(props) => props.theme.backgroundColor2};
+	${(props) => props.theme.backgroundColor == "black" && `background-color: ${props.theme.backgroundColor2}`};
 	transition: 0.5s;
 	:hover {
 		cursor: pointer;

@@ -4,7 +4,7 @@ import { DefaultTheme } from "styled-components";
 
 const LightTheme: DefaultTheme = {
 	backgroundColor: "white",
-	backgroundColor2: "black",
+	backgroundColor2: "#c5c5c5",
 
 	colors: {
 		main: "#1d1d1d",

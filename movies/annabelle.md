@@ -1,6 +1,13 @@
 ---
-title: Annabelle
-description: "Steps to access allow a docker container to access stuff on the host"
+title: ANNABELLE WRACA DO DOMU
+age: 18
+description: Demonologowie Ed i Lorraine Warren chcą za wszelką cenę uniemożliwić Annabelle dokonywanie kolejnych okrutnych czynów. Przywożą opętaną lalkę do zamkniętego pokoju z niezwykłymi przedmiotami w swoim domu. Układają ją „bezpiecznie” za poświęconym szkłem i proszą księdza o udzielenie błogosławieństwa.
+duration: 106
+genre: Horror
+photo: https://media.multikino.pl/thumbnails/50/rc/NzIyRTEw/eyJ0aHV…uploads/images/films_and_events/annabelle3-pl_f49676b3d4.jpg
+released: true
+city: [Zabrze, Katowice]
+seance: [{ dimension: 3D, dubbing: Dubbing, hour: "18:00" }, { dimension: 2D, dubbing: Napisy, hour: "20:00" }]
 ---
 
 <!-- @format -->

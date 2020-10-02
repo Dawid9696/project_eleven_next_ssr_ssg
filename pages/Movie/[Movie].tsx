@@ -1,50 +1,70 @@
 /** @format */
 
 import React from "react";
+import fs from "fs";
+import { GetStaticProps, GetStaticPaths } from "next";
+import path from "path";
+import matter from "gray-matter";
+import Head from "next/head";
+import marked from "marked";
 import styled from "styled-components";
-import Link from "next/link";
-import { DataProps } from "../../pages/ServerShop";
 
-import Seance from "./Seance";
-
-interface CardProps {
-	city: [string];
-	_id: string;
-	title: string;
-	genre: string;
-	duration: number;
-	description: string;
-	seance: [Seance];
-	photo: string;
-	age: number;
-}
-
-type CardData = { shopData: CardProps };
-
-const RestCard: React.FC<CardData> = ({ shopData }) => {
-	console.log(shopData);
+const Movie = ({ movie }: any) => {
 	return (
-		<Card>
-			<Photo photo={shopData.photo}></Photo>
-			<Info>
-				<Title>
-					<Link href={`/Movie/${shopData._id}`}>{shopData.title}</Link>
-				</Title>
-				<Details>
-					Od {shopData.age} lat | {shopData.genre} | {shopData.duration} min
-				</Details>
-				<Description>{shopData.description}</Description>
-				<Seances>
-					{shopData.seance.map((seance, index) => (
-						<Seance key={index} seance={seance} />
-					))}
-				</Seances>
-			</Info>
-		</Card>
+		<div>
+			<Head>
+				<title>{movie.title}</title>
+				<meta property='og:title' content='My page title' key='title' />
+			</Head>
+			<ShopLayout>
+				<ul>
+					<li>Tytuł: {movie.title}</li>
+					<li>Od {movie.age} lat</li>
+					<li>Rodzaj: {movie.genre}</li>
+					<li>Czas trwania: {movie.duration} min</li>
+					<li>Opis: {movie.description}</li>
+				</ul>
+			</ShopLayout>
+		</div>
 	);
 };
 
-export default RestCard;
+const ShopLayout = styled.div`
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	display: flex;
+	width: 60vw;
+	height: 80vh;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	color: ${(props) => props.theme.colors.main};
+	@media (max-width: 768px) {
+		min-width: 90vw;
+	}
+`;
+
+export default Movie;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const res = await fetch("http://localhost:3000/Mroczkowski/api");
+	const movies = await res.json();
+	const paths = movies.map((movie) => ({
+		params: { Movie: movie._id },
+	}));
+	return { paths, fallback: false };
+};
+export const getStaticProps: GetStaticProps = async ({ params: { Movie } }: any) => {
+	const res = await fetch(`http://localhost:5000/Multikino/movie/${Movie}`);
+	const movie = await res.json();
+	return {
+		props: {
+			movie,
+		},
+		revalidate: 1,
+	};
+};
 
 const Card = styled.div`
 	margin: 20px;
@@ -54,7 +74,8 @@ const Card = styled.div`
 	justify-content: center;
 	align-items: center;
 	flex-direction: row;
-	${(props) => (props.theme.backgroundColor == "black" ? `background-color: ${props.theme.backgroundColor2}` : `border-bottom:2px solid grey`)};
+	background-color: ${(props) => props.theme.backgroundColor2};
+
 	@media (max-width: 768px) {
 		flex-direction: column;
 	}

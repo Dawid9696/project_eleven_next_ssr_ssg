@@ -43,7 +43,7 @@ const AppNavigator = styled.div`
 		width: 100vw;
 		justify-content: space-evenly;
 		font-size: 10px;
-		background-color: ${(props) => props.theme.backgroundColor2};
+		${(props) => props.theme.backgroundColor == "black" && `background-color: ${props.theme.backgroundColor2}`};
 		flex-direction: column;
 	}
 `;

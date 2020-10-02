@@ -1,50 +1,79 @@
 /** @format */
 
 import React from "react";
+import fs from "fs";
+import { GetStaticProps, GetStaticPaths } from "next";
+import path from "path";
+import matter from "gray-matter";
+import Head from "next/head";
+import marked from "marked";
 import styled from "styled-components";
-import Link from "next/link";
-import { DataProps } from "../../pages/ServerShop";
 
-import Seance from "./Seance";
+import RestCard from "../components/Home/RestCard";
+import Seance from "../components/Home/Seance";
 
-interface CardProps {
-	city: [string];
-	_id: string;
-	title: string;
-	genre: string;
-	duration: number;
-	description: string;
-	seance: [Seance];
-	photo: string;
-	age: number;
-}
-
-type CardData = { shopData: CardProps };
-
-const RestCard: React.FC<CardData> = ({ shopData }) => {
-	console.log(shopData);
+const SSGMovie = ({ htmlString, data }: any) => {
 	return (
-		<Card>
-			<Photo photo={shopData.photo}></Photo>
-			<Info>
-				<Title>
-					<Link href={`/Movie/${shopData._id}`}>{shopData.title}</Link>
-				</Title>
-				<Details>
-					Od {shopData.age} lat | {shopData.genre} | {shopData.duration} min
-				</Details>
-				<Description>{shopData.description}</Description>
-				<Seances>
-					{shopData.seance.map((seance, index) => (
-						<Seance key={index} seance={seance} />
-					))}
-				</Seances>
-			</Info>
-		</Card>
+		<div>
+			<Head>
+				<title>{data.title}</title>
+				<meta property='og:title' content='My page title' key='title' />
+			</Head>
+			<ShopLayout>
+				<Card>
+					<Photo
+						photo={"https://media.multikino.pl/thumbnails/50/rc/OTI4QjU4/eyJ0aHV…ploads/images/films_and_events/naprzod-plakat_72ad32dc1f.jpg"}
+					></Photo>
+					<Info>
+						<Title>{data.title}</Title>
+						<Details>
+							Od {data.age} lat | {data.genre} | {data.duration} min
+						</Details>
+						<Description>{data.description}</Description>
+						<Seances>
+							{data.seance.map((seance, index) => (
+								<Seance key={index} seance={seance} />
+							))}
+						</Seances>
+					</Info>
+				</Card>
+			</ShopLayout>
+		</div>
 	);
 };
 
-export default RestCard;
+const ShopLayout = styled.div`
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+`;
+
+export default SSGMovie;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const files = fs.readdirSync("movies");
+	const paths = files.map((filename) => ({
+		params: {
+			SSGMovie: filename.replace(".md", ""),
+		},
+	}));
+	return {
+		paths,
+		fallback: false, // See the "fallback" section below
+	};
+};
+export const getStaticProps: GetStaticProps = async ({ params: { SSGMovie } }: any) => {
+	const metaData = fs.readFileSync(path.join("movies", SSGMovie + ".md")).toString();
+	const parsedMetaData = matter(metaData);
+	const htmlString = marked(parsedMetaData.content);
+	return {
+		props: { htmlString, data: parsedMetaData.data }, // will be passed to the page component as props
+	};
+};
 
 const Card = styled.div`
 	margin: 20px;
@@ -55,6 +84,7 @@ const Card = styled.div`
 	align-items: center;
 	flex-direction: row;
 	${(props) => (props.theme.backgroundColor == "black" ? `background-color: ${props.theme.backgroundColor2}` : `border-bottom:2px solid grey`)};
+
 	@media (max-width: 768px) {
 		flex-direction: column;
 	}

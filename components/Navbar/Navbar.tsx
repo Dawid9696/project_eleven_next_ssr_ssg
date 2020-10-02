@@ -3,14 +3,12 @@
 import styled from "styled-components";
 
 //IMPORTED COMPOENTNS
-import Logo from "./Logo";
 import Navigator from "./Navigator";
 import UserPanel from "./UserPanel";
 
 const Navbar: React.FC = () => {
 	return (
 		<AppNavbar>
-			<Logo photo='https://st.focusedcollection.com/13422768/i/650/focused_243419438-stock-photo-rendered-illustration-male-cyclist-black.jpg' />
 			<Navigator />
 			<UserPanel />
 		</AppNavbar>
@@ -29,7 +27,12 @@ const AppNavbar = styled.div`
 	justify-content: center;
 	align-items: center;
 	flex-direction: row;
+	${(props) =>
+		props.theme.backgroundColor == "black"
+			? `background-color: ${props.theme.backgroundColor2}`
+			: `border-left:40px solid ${props.theme.colors.fourth}`};
 	@media (max-width: 768px) {
 		flex-direction: column;
+		border: none;
 	}
 `;

@@ -29,10 +29,7 @@ const AppLayout = styled.div`
 	align-items: center;
 	flex-direction: column;
 	overflow: hidden;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-image: url("https://static.dezeen.com/uploads/2016/04/back-bike-ion-lucin-sport-cycling-design-technology_dezeen_1568_17.jpg");
+	background-color: ${(props) => props.theme.backgroundColor};
 
 	@media (max-width: 768px) {
 		background-size: cover;
